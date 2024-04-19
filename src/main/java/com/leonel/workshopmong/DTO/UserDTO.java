@@ -1,6 +1,7 @@
 package com.leonel.workshopmong.DTO;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import com.leonel.workshopmong.domain.User;
 
@@ -19,6 +20,10 @@ public class UserDTO implements Serializable {
 		id = obj.getId();
 		name = obj.getName();
 		email = obj.getEmail();
+	}
+
+	public UserDTO(Optional<User> obj) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getId() {
