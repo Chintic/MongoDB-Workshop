@@ -1,5 +1,6 @@
 package com.leonel.workshopmong.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonel.workshopmong.DTO.UserDTO;
 import com.leonel.workshopmong.domain.User;
@@ -37,6 +41,8 @@ public class UserResource {
 	}
 	*/
 	
+	//Aqui dá continuidade da URL da classe principal: /users/id
+	//PathVariable diz que a variável que vem depois da annotation tem que casar com o que está contido na URL.
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable String id){
 	    User user = service.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
@@ -44,5 +50,12 @@ public class UserResource {
 	    return ResponseEntity.ok().body(userDTO);
 	}
 
+	@PostMapping()
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
+		User obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+	    return ResponseEntity.created(uri).build();
+	}
 	
 }
