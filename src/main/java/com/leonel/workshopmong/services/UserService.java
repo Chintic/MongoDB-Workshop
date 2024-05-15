@@ -33,11 +33,32 @@ public class UserService {
 		return repository.insert(obj);
 	}
 	
-	public void delete (String id) {
-		findById(id);
-		repository.deleteById(id);
+	public void delete(String id) {
+	    Optional<User> user = findById(id);
+	    if (user.isPresent()) {
+	        repository.deleteById(id);
+	    } else {
+	        throw new ObjectNotFoundException("Objeto não encontrado");
+	    }
 	}
 	
+	public User update (User obj) {
+		Optional<User> optUser = findById(obj.getId());
+		if (optUser.isPresent()) {
+			User newObj = optUser.get();
+	        updateData(newObj, obj);
+	        return repository.save(newObj);
+		}
+		else {
+			throw new ObjectNotFoundException("Objeto não encontrado");
+		}
+	}
+	
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
+	}
+
 	// Poderia ter feito na própria classe UserDTO para manter o propósito único. Mas como pode haver necessidades de acesso ao
 	// repository, foi preferível fazer aqui.
 	public User fromDTO(UserDTO objDTO) {
