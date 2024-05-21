@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leonel.workshopmong.DTO.UserDTO;
+import com.leonel.workshopmong.domain.Post;
 import com.leonel.workshopmong.domain.User;
 import com.leonel.workshopmong.services.UserService;
 import com.leonel.workshopmong.services.exception.ObjectNotFoundException;
@@ -72,6 +73,12 @@ public class UserResource {
 		obj.setId(id);
 		obj = service.update(obj);
 	    return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{id}/posts")
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id){
+	    User user = service.findById(id).orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+	    return ResponseEntity.ok().body(user.getPosts());
 	}
 	
 	
