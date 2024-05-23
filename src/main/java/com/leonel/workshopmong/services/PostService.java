@@ -28,8 +28,14 @@ public class PostService {
 		return post;
 	}
 	
+	/* Método 1 (sem a query personalizada):
 	public List<Post> findByTitle(String text) {
 		return repository.findByTitleContainingIgnoreCase(text);
 	}
-	 
+	*/
+	
+	//Método 2 (com a query personalizada):
+	public List<Post> findByTitle(String text) {
+		return repository.searchTitle(text);
+	}
 }
