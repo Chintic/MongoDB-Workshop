@@ -1,5 +1,6 @@
 package com.leonel.workshopmong.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +38,10 @@ public class PostService {
 	//Método 2 (com a query personalizada):
 	public List<Post> findByTitle(String text) {
 		return repository.searchTitle(text);
+	}
+	
+	public List<Post> fullSearch(String text, Date minDate, Date maxDate) {
+		maxDate	= new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
+		return repository.fullSearch(text, minDate, maxDate);
 	}
 }
